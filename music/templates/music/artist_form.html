@@ -1,0 +1,39 @@
+{% extends "music/base.html" %}
+{% load static %}
+
+{% block base_head %}
+  {{ block.super }}
+{% endblock %}
+
+{% block content %}
+
+  {% if form.errors %}
+    <p>Your username and password didn't match. Please try again.</p>
+  {% endif %}
+
+
+  <main role="main" class="container">
+    <div class="d-flex align-items-center justify-content-between p-3 my-3 text-white bg-primary rounded box-shadow">
+        New Artist
+    </div>
+
+    <div class="my-3 p-3 bg-white rounded box-shadow">
+      <h6 class="border-bottom border-gray pb-2 mb-0">Add artist</h6>
+
+      <form method="post" action="{% url 'music:add_artist' %}">
+        {% csrf_token %}
+
+        <h1 class="h3 mb-3 font-weight-normal">Add artist to Museek</h1>
+
+        {% include "partials/base_form.html" with form=form %}
+
+        <input class="btn btn-lg btn-primary btn-block" type="submit" value="Add" />
+        <input type="hidden" name="next" value="{{ request.GET.next }}" />
+      </form>
+    </div>
+  </main>
+
+
+
+
+{% endblock %}

@@ -8,11 +8,14 @@ from . import views
 
 app_name = 'music'
 urlpatterns = [
-    path('artists/', views.all_artists, name = 'All Artists'),
-    path('songs/', views.all_songs, name = 'All Songs'),
-    path('lists/', views.all_lists, name = 'All Lists'),
+    path('artists/', views.all_artists, name = 'all_artists'),
+    path('artists/add', views.add_artist, name='add_artist'),
+    path('songs/', views.all_songs, name = 'all_songs'),
+    path('songs/add', views.add_song, name='add_song'),
+    path('lists/', views.all_lists, name = 'all_lists'),
     path('home/', views.home, name="home"),
     path('@<str:username>/', views.user_home, name='user_home'),
+    path('@<str:username>/add', views.add_song_to_library, name='add_song_to_library'),
     path('', views.index, name='index')
 ]
 
