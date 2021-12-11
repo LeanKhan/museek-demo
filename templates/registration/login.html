@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block base_head %}
+  {{ block.super }}
+  <link href="{% static 'css/login.css' %}" rel="stylesheet" type="text/css">
+{% endblock %}
+
+{% block content %}
+
+  {% if form.errors %}
+    <p>Your username and password didn't match. Please try again.</p>
+  {% endif %}
+
+  {% if next %}
+    {% if user.is_authenticated %}
+      <p>Your account doesn't have access to this page. To proceed,
+      please login with an account that has access.</p>
+    {% else %}
+      <p>Please login to see this page.</p>
+    {% endif %}
+  {% endif %}
+
+
+  <form method="post" action="{% url 'login' %}" class="form-signin">
+    {% csrf_token %}
+    <img class="mb-4" src="{% static 'img/bootstrap-solid.svg' %}" alt="" width="72" height="72">
+    <h1 class="h3 mb-3 font-weight-normal">Login to Museek</h1>
+
+    {% include "partials/base_form.html" with form=form %}
+
+    <input class="btn btn-lg btn-primary btn-block" type="submit" value="Login" />
+    <input type="hidden" name="next" value="{{ next }}" />
+
+        {# Assumes you setup the password_reset view in your URLconf #}
+        <p><a href="{% url 'password_reset' %}">Lost password?</a></p>
+
+        <p><a href="{% url 'signup' %}">Create account?</a></p>
+
+    <p class="mt-5 mb-3 text-muted">© Emmanuel Segun-Lean</p>
+  </form>
+
+{% endblock %}
