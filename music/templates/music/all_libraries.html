@@ -1,0 +1,30 @@
+{% extends "music/base.html" %}
+{% load static %}
+
+{% block base_head %}
+  {{ block.super }}
+{% endblock %}
+
+{% block content %}
+
+
+  <main role="main" class="container">
+    <div class="d-flex align-items-center justify-content-between p-3 my-3 text-white bg-primary rounded box-shadow">
+        All Libraries
+    </div>
+
+    <div class="my-3 p-3 bg-white rounded box-shadow">
+        {% if libraries %}
+
+        {% for lib in libraries %}
+          {% include "music/partials/library-list-item.html" with library=lib %}
+        {% endfor %}
+
+      {% else %}
+          <div class="alert alert-secondary p-5 my-3 text-center lead">
+              No Libraries
+          </div>
+      {% endif %}
+    </div>
+  </main>
+{% endblock %}

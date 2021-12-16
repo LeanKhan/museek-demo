@@ -11,20 +11,29 @@ def index(request):
 
 def all_artists(request):
 
-    a_ = Artist.objects.all()
+    artists = Artist.objects.all()
 
-    data = ", ".join([artist.name for artist in a_])
+    ctx = {'artists': artists}
 
-    return HttpResponse(f"All artists => {data}")
+    return render(request, 'music/all_artists.html', ctx)
 
 
 def all_songs(request):
 
-    a_ = Song.objects.all()
+    songs = Song.objects.all()
 
-    data = ", ".join([song.title for song in a_])
+    ctx = {'songs': songs}
 
-    return HttpResponse(f"All songs => {data}")
+    return render(request, 'music/all_songs.html', ctx)
+
+
+def all_libraries(request):
+
+    libs = List.objects.all()
+
+    ctx = {'libraries': libs}
+
+    return render(request, 'music/all_libraries.html', ctx)
 
 
 def all_lists(request):
@@ -41,9 +50,28 @@ def user_home(request, username):
 
     add_song_form = AddSongToLibraryForm(instance=user.library)
 
-    ctx = {'library': user.library, 'u': user, 'songs': user.library.songs.all(), 'add_song_form': add_song_form}
+    suggested_libraries = List.objects.exclude(user=request.user)
+
+    ctx = {'library': user.library, 'u': user, 'songs': user.library.songs.all(),
+     'add_song_form': add_song_form, 'suggested_libraries': suggested_libraries}
 
     return render(request, 'music/user_home.html', ctx)
+
+def view_artist(request, slug, id):
+
+    artist = get_object_or_404(Artist, id=id)
+
+    ctx = {'artist': artist}
+
+    return render(request, 'music/view_artist.html', ctx)
+
+def view_song(request, slug, id):
+
+    song = get_object_or_404(Song, id=id)
+
+    ctx = {'song': song}
+
+    return render(request, 'music/view_song.html', ctx)
 
 @login_required
 def add_song_to_library(request, username):
@@ -68,7 +96,15 @@ def add_song(request):
     if request.method == 'POST':
         form = SongForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            sng = form.save(commit=False)
+
+            sng.uploaded_by = request.user
+
+            sng.save()
+
+            if request.POST.get('add_to_library'):
+                request.user.library.songs.add(sng)
+
             next_url = request.POST.get('next') if request.POST.get('next') else reverse('music:all_songs')
             return redirect(next_url)
         # else:

@@ -7,7 +7,7 @@ from django.utils.safestring import mark_safe
 class SongForm(ModelForm):
     class Meta:
         model = Song
-        exclude = ['likes']
+        exclude = ['likes', 'slug', 'uploaded_by']
 
     art = ImageField(required=False)
     audio_file = FileField(required=False)
@@ -21,7 +21,7 @@ class SongForm(ModelForm):
 class ArtistForm(ModelForm):
     class Meta:
         model = Artist
-        exclude = '__all__'
+        exclude = ['slug']
 
 
 class AddSongToLibraryForm(ModelForm):

@@ -28,10 +28,13 @@
         <div class="collapse navbar-collapse" id="navbarsExample07">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-              <a class="nav-link" href="#">Songs</a>
+              <a class="nav-link" href="{% url 'music:all_songs' %}">Songs</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Artists</a>
+              <a class="nav-link" href="{% url 'music:all_artists' %}">Artists</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'music:all_libraries' %}">Libraries</a>
             </li>
           </ul>
           <form class="form-inline my-2 my-md-0">
