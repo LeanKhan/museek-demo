@@ -9,11 +9,11 @@ def signup(request):
         form = SignUpForm(request.POST)
         if form.is_valid():
             form.save()
-            username = form.cleaned_data.get('username')
-            raw_password = form.cleaned_data.get('password')
-            email = form.cleaned_data.get('email')
+            # username = form.cleaned_data.get('username')
+            # raw_password = form.cleaned_data.get('password')
+            # email = form.cleaned_data.get('email')
 
-            user = User.objects.create_user(username, email, raw_password)
+            # user = User.objects.create_user(username, email, raw_password)
             return redirect('music:user_home', username=username)
     else:
         form = SignUpForm()
