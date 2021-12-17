@@ -1,0 +1,26 @@
+{% extends "music/base.html" %}
+{% load static %}
+
+{% block base_head %}
+  {{ block.super }}
+{% endblock %}
+
+{% block content %}
+
+<main role="main" class="container">
+  <div class="d-flex align-items-center justify-content-between p-3 my-3 text-white bg-primary rounded box-shadow">
+      New Song
+  </div>
+
+  <div class="my-3 p-3 bg-white rounded box-shadow">
+  <form action="" method="post">
+    {% csrf_token %}
+    <table>
+    {{ form.as_table }}
+    </table>
+    <input type="submit" value="Submit">
+  </form>
+  </div>
+  </main>
+
+{% endblock %}

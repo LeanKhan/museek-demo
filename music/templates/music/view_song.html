@@ -15,17 +15,11 @@
             <span>
                 {{ song.title }}
             </span>
-
-            {% if song.uploaded_by %}
-            <span class="badge ml-3 badge-dark">
-              Uploaded by: <a href="/@{{ song.uploaded_by.username }}"> {{ song.uploaded_by }} </a>
-            </span>
-            {% endif %}
         </div>
 
         <div class="d-flex justify-content-between">
 
-            <span class="badge badge-light">Part of {{ song.lists.count }} libraries</span>
+
 
         {% if user.is_authenticated and song.uploaded_by == user %}
           <a class="btn btn-success open-modal-hash" href="{{ request.get_full_path }}/edit">
@@ -39,19 +33,30 @@
     </div>
 
     <div class="my-3 p-3 bg-white rounded box-shadow">
-        <h2 class=" pb-2 mb-0">{{ song.title }}</h2>
+
+        <h2 class=" pb-2 mb-0">{{ song.title }}  <span class="h5 text-muted">-</span>      <a href="{% url 'music:view_artist' song.artist.slug song.artist.id %}" class="h3 text-secondary">
+            {{ song.artist.name }}
+        </a></h2>
         {% if song.uploaded_by %}
         <span class="badge badge-dark">
           Uploaded by: <a href="/@{{ song.uploaded_by.username }}"> {{ song.uploaded_by }} </a>
         </span>
         {% endif %}
-        <h4 class="text-secondary">
-            {{ song.artist.name }}
-        </h4>
+
+        <span class="badge badge-primary">Part of {{ song.lists.count }} libraries</span>
+
 
         <p>
             {{ song.comment }}
         </p>
+
+        <hr />
+
+        {% if song.link %}
+            <div class="alert alert-success">
+                You can listen to the song <a href="{{ song.link }}" target="_blank" title="Listen to {{ song.title }} online">here</a>
+            </div>
+        {% endif %}
 
 
 

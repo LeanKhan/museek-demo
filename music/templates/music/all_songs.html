@@ -10,7 +10,21 @@
 
   <main role="main" class="container">
     <div class="d-flex align-items-center justify-content-between p-3 my-3 text-white bg-primary rounded box-shadow">
-        All Songs
+
+        <div>
+            All Songs
+        </div>
+
+        {% if user and user.is_authenticated %}
+        <div class="d-flex justify-content-between">
+            <a
+            class="btn btn-success"
+            href="{% url 'music:add_song' %}?next={{ request.get_full_path }}"
+            >Add new song</a
+          >
+        </div>
+        {% endif %}
+
     </div>
 
     <div class="my-3 p-3 bg-white rounded box-shadow">

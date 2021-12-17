@@ -9,8 +9,6 @@ class SongForm(ModelForm):
         model = Song
         exclude = ['likes', 'slug', 'uploaded_by']
 
-    art = ImageField(required=False)
-
     artist = ModelChoiceField(queryset=Artist.objects.all(),
                                     help_text=mark_safe("Can't find an artist?<br />\
                                      <a class='btn btn-light btn-outline-info btn-sm' href='/artists/add?next=/songs/add'>Add them to Museek</a>"),

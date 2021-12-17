@@ -25,6 +25,7 @@ urlpatterns = [
     path('libraries/', views.all_libraries, name = 'all_libraries'),
     path('home/', views.home, name="home"),
     path('@<str:username>/', views.user_home, name='user_home'),
+    path('users/<int:pk>/update/', views.ProfileUpdate.as_view(), name='update_profile'),
     path('@<str:username>/add', views.add_song_to_library, name='add_song_to_library'),
     path('', views.index, name='index')
 ]

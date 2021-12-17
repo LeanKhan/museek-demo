@@ -3,8 +3,18 @@ from .models import Artist, Song, List, Profile, User
 from .forms import SongForm, ArtistForm, AddSongToLibraryForm
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
+from django.views.generic.edit import UpdateView
 
 # Create your views here.
+
+class ProfileUpdate(UpdateView):
+    model = Profile
+    fields = ['fullname', 'bio', 'location']
+
+    template_name = "music/profile_form.html"
+
+    def get_success_url(self) -> str:
+        return reverse("music:user_home", kwargs={"username": self.get_object().user.username})
 
 def index(request):
     return render(request, "music/index.html", {"title": "Home"})
