@@ -74,6 +74,38 @@ def view_song(request, slug, id):
     return render(request, 'music/view_song.html', ctx)
 
 @login_required
+def update_song(request, slug, id):
+
+    song = get_object_or_404(Song, id=id)
+    # if uploaded by someone else...
+    if song.uploaded_by and song.uploaded_by != request.user:
+        return HttpResponse("""<h1 class="display-4">Unauthorized mehn!</h1> <p><a href = "/">Back home</a></p>""")
+    song_form = SongForm(request.POST or None, instance=song)
+    if request.method == 'POST':
+        if song_form.is_valid():
+            song_form.save()
+            next_url = request.POST.get('next') if request.POST.get('next') else reverse('music:view_song',
+             kwargs={"slug": song.slug, "id": song.id})
+            return redirect(next_url)
+        # else:
+        #     return HttpResponse("""your form is wrong, reload on <a href = "{{ url : 'index'}}">reload</a>""")
+    else:
+        return render(request, 'music/update_song_form.html', {'form':song_form, 'song': song})
+
+# update song
+@login_required
+def delete_song(request, slug, id):
+    song = get_object_or_404(Song, id=id)
+
+    try:
+        song.delete()
+    except:
+        return HttpResponse("""<h1 class="display-4">Error deleting Song!</h1> <p><a href = "/">Back home</a></p>""")
+
+    next_url = request.POST.get('next') if request.POST.get('next') else reverse('music:all_songs')
+    return redirect(next_url)
+
+@login_required
 def add_song_to_library(request, username):
     if request.method == 'POST':
         add_song_form = AddSongToLibraryForm(request.POST, instance=request.user.library)
@@ -85,6 +117,25 @@ def add_song_to_library(request, username):
 
 
     return redirect('music:user_home', username=request.user.username)
+
+# liking a song is the same as adding it to your library...
+@login_required
+def toggle_like_song(request, slug, id):
+    if request.method == 'POST':
+
+        # get user library, get song
+
+        song = get_object_or_404(Song, id=id)
+
+        if song in request.user.library.songs.all():
+            request.user.library.songs.remove(song)
+        else:
+            request.user.library.songs.add(song)
+
+        request.user.library.save()
+
+    next_url = request.POST.get('next') if request.POST.get('next') else reverse('music:user_home', kwargs={"username": request.user.username})
+    return redirect(next_url)
 
 @login_required
 def home(request):
@@ -125,3 +176,36 @@ def add_artist(request):
         #     return HttpResponse("""your form is wrong, reload on <a href = "{{ url : 'index'}}">reload</a>""")
     else:
         return render(request, 'music/artist_form.html', {'form':form})
+
+
+# update artist
+@login_required
+def update_artist(request, slug, id):
+
+    artist = get_object_or_404(Artist, id=id)
+    # if uploaded by someone else...
+
+    artist_form = ArtistForm(request.POST or None, instance=artist)
+    if request.method == 'POST':
+        if artist_form.is_valid():
+            artist_form.save()
+            next_url = request.POST.get('next') if request.POST.get('next') else reverse('music:view_artist',
+             kwargs={"slug": artist.slug, "id": artist.id})
+            return redirect(next_url)
+        # else:
+        #     return HttpResponse("""your form is wrong, reload on <a href = "{{ url : 'index'}}">reload</a>""")
+    else:
+        return render(request, 'music/update_artist_form.html', {'form':artist_form, 'artist': artist})
+
+# delete artist
+@login_required
+def delete_artist(request, slug, id):
+    artist = get_object_or_404(Artist, id=id)
+
+    try:
+        artist.delete()
+    except:
+        return HttpResponse("""<h1 class="display-4">Error deleting Artist!</h1> <p><a href = "/">Back home</a></p>""")
+
+    next_url = request.POST.get('next') if request.POST.get('next') else reverse('music:all_artists')
+    return redirect(next_url)

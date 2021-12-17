@@ -53,10 +53,8 @@ class Song(models.Model):
     duration = models.IntegerField(null=True, blank=True)
     mood = models.CharField(max_length=50)
     art = models.ImageField(upload_to="music/art")
-    audio_file = models.FileField(null=True, blank=True, upload_to="music/songs")
     comment = models.TextField()
     link = models.URLField()
-    likes = models.IntegerField(default=0)
     uploaded_by = models.ForeignKey(User, null=True, on_delete=SET_NULL)
 
     YOUTUBE = 'YT'

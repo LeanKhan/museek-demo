@@ -1,0 +1,51 @@
+{% extends "music/base.html" %}
+{% load static %}
+
+{% block base_head %}
+  {{ block.super }}
+{% endblock %}
+
+{% block title %}
+  Update {{ song.title }}
+{% endblock %}
+
+{% block content %}
+
+  {% if form.errors %}
+    <p>Some things are wrong! :)</p>
+  {% endif %}
+
+
+  <main role="main" class="container">
+    <div class="d-flex align-items-center justify-content-between p-3 my-3 text-white bg-warning rounded box-shadow">
+        Update Song
+    </div>
+
+    <div class="my-3 p-3 bg-white rounded box-shadow">
+      <h6 class="border-bottom border-gray pb-2 mb-0">Updating {{ song.title }} </h6>
+
+      <form method="post" action="{% url 'music:update_song' song.slug song.id %}">
+        {% csrf_token %}
+
+        {% include "partials/base_form.html" with form=form %}
+
+
+        <div class="row">
+            <div class="col-12 col-md-6 mb-3 mb-md-0">
+                <a class="btn btn-lg btn-secondary btn-block" href="/">Cancel</a>
+
+            </div>
+            <div class="col-12 col-md-6">
+                <input class="btn btn-lg btn-primary btn-block" type="submit" value="Update" />
+            </div>
+        </div>
+
+        <input type="hidden" name="next" value="{{ request.GET.next }}" />
+      </form>
+    </div>
+  </main>
+
+
+
+
+{% endblock %}

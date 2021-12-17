@@ -3,4 +3,16 @@
 {% block content %}
   <p>Logged out!</p>
   <a href="{% url 'login'%}">Click here to login again.</a>
+
+{% endblock %}
+
+{% block base_scripts%}
+  {{ block.super }}
+
+  <script>
+    $(function() {
+      console.log('poop')
+      document.location = "/";
+    });
+  </script>
 {% endblock %}

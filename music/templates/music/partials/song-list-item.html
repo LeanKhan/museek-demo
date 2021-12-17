@@ -20,14 +20,43 @@
 
 
 
+
       <div class="d-flex justify-content-between align-items-center w-100 text-muted">
         <p>
           {{ song.comment }}
         </p>
 
         <div>
-          <a id="play-song" href="#player" type="button" class="btn btn-info btn-rounded rounded" data-toggle="modal" data-target="#player" data-backdrop="false">P</a>
-          {{ song.likes }} likes
+
+          {% if user.is_authenticated and song.uploaded_by == user %}
+            <a href="{{ song.get_absolute_url }}/edit?next={{ request.get_full_path }}" title="Edit {{ song.title }}" type="button" class="btn btn-sm btn-secondary ">
+              <img src="https://icongr.am/octicons/pencil.svg?size=20&color=ffffff">
+            </a>
+          {% endif %}
+
+          {% if user.is_authenticated and song.uploaded_by == user %}
+            <a href="{{ song.get_absolute_url }}/delete?next=/songs" title="Delete {{ song.title }}" type="button" class="btn btn-sm btn-danger ">
+              <img src="https://icongr.am/octicons/trashcan.svg?size=20&color=ffffff">
+            </a>
+          {% endif %}
+
+          <form class="mt-2" action="{% url 'music:toggle_like_song' song.slug song.id %}?next={{ request.get_full_path }}" method="post">
+            {% csrf_token %}
+            {% if user.is_authenticated and song in user.library.songs.all %}
+              <button click="this.form.submit()" title="Unlike song" type="submit" class="btn btn-sm btn-light" type="submit">
+                <img src="https://icongr.am/octicons/heart-fill.svg?size=20&color=e83030">
+
+                {{ song.lists.count }} likes
+              </button>
+              {% else %}
+              <button click="this.form.submit()" title="Like song" type="submit" class="btn btn-sm btn-light" type="submit">
+                <img src="https://icongr.am/octicons/heart.svg?size=20&color=e83030">
+
+                {{ song.lists.count }} likes
+              </button>
+            {% endif %}
+          </form>
+
         </div>
       </div>
     </div>

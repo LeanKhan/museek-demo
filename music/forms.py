@@ -10,7 +10,6 @@ class SongForm(ModelForm):
         exclude = ['likes', 'slug', 'uploaded_by']
 
     art = ImageField(required=False)
-    audio_file = FileField(required=False)
 
     artist = ModelChoiceField(queryset=Artist.objects.all(),
                                     help_text=mark_safe("Can't find an artist?<br />\

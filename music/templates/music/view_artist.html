@@ -10,11 +10,33 @@
 
   <main role="main" class="container">
     <div class="d-flex align-items-center justify-content-between p-3 my-3 text-white bg-primary rounded box-shadow">
-        {{ artist.name }}
+        <div>
+            {{ artist.name }}
+        </div>
+
+    {% if user.is_authenticated %}
+    <div class="d-flex justify-content-between">
+      <a class="btn btn-success open-modal-hash" href="{{ request.get_full_path }}/edit">
+        Update
+      </a>
+    </div>
+    {% endif %}
+
     </div>
 
     <div class="my-3 p-3 bg-white rounded box-shadow">
-        Artist name!
+        <h4 class="border-bottom border-gray pb-2 mb-0">Songs</h4>
+        {% if artist.songs %}
+
+        {% for s in artist.songs.all %}
+          {% include "music/partials/song-list-item.html" with song=s %}
+        {% endfor %}
+
+      {% else %}
+          <div class="alert alert-secondary p-5 my-3 text-center lead">
+              {{ artist.name }} has no songs yet :)
+          </div>
+      {% endif %}
     </div>
   </main>
 {% endblock %}
