@@ -26,6 +26,8 @@ SECRET_KEY = 'django-insecure--d7v=ty1vp5si!_z*s1n)4=w@45ws#*mrdnq(5lnwt+xb*m^wv
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+ENV = 'dev'
+
 ALLOWED_HOSTS = []
 
 
@@ -120,6 +122,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
+if ENV != 'dev':
+    STATIC_URL = '/assets/'
+    STATIC_ROOT = os.path.join(BASE_DIR, 'assets')
 
 STATICFILES_DIRS = [
     BASE_DIR /  'static',
